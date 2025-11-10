@@ -1,10 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Efficiency of Decimal-Ternary Conversion via Nonary Arithmetic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <!-- Load MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Custom overrides for typical academic look */
+        body {
+            font-family: 'Georgia', serif; /* Serif for better long-form reading */
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Inter', sans-serif; /* Sans-serif for clear headings */
+        }
+        .abstract {
+            font-size: 0.95rem;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-$END$
+<body class="bg-gray-100 text-gray-900 leading-relaxed antialiased">
+
+<main class="max-w-4xl mx-auto my-12 p-8 md:p-16 bg-white shadow-sm border border-gray-200 rounded-sm">
+    <!-- Header -->
+    <header class="mb-12 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800 leading-tight">
+            The Efficiency of Decimal-Ternary Conversion via Nonary Arithmetic: A Practical Application of the $p \to p \pm 1$ Translation Algorithm
+        </h1>
+        <div class="text-gray-600 mt-6">
+            <p class="font-semibold">Author Name</p>
+            <p class="italic">Department of Computer Science, University Name</p>
+            <p class="text-sm mt-2">November 9, 2025</p>
+        </div>
+    </header>
+
+    <!-- Abstract -->
+    <section class="mb-10 px-6 py-5 bg-gray-50 border-l-4 border-gray-400 abstract rounded">
+        <h2 class="text-lg font-bold uppercase tracking-wider mb-2 text-gray-700 font-sans">Abstract</h2>
+        <p class="italic text-gray-700">
+            This paper analyzes the application of $p \to p \pm 1$ base translation algorithms as a computationally efficient solution for the conversion problem between decimal (base 10) and ternary (base 3) systems. The central finding is that, rather than a direct $10 \leftrightarrow 3$ conversion, an indirect route via the nonary (base 9) system offers superior performance. The $p \to p-1$ algorithm facilitates a rapid translation from decimal to nonary, while the relationship $9=3^2$ allows for a trivial mapping from nonary to standard ternary. This method was historically significant in ternary computing architectures, such as the Setun, to optimize input/output (I/O) operations. Additionally, the same $p \to p-1$ algorithm provides a direct route for $3 \to 2$ conversion, crucial for interoperability with binary systems.
+        </p>
+    </section>
+
+    <!-- Article Body -->
+    <article class="space-y-8">
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">1. Introduction</h2>
+            <p class="mb-4">
+                Ternary computing, particularly balanced ternary systems (using digits $\{-1, 0, 1\}$), offers theoretical advantages in storage efficiency and logical complexity. However, its practical adoption, exemplified by the Setun computer, faced fundamental interoperability challenges:
+            </p>
+            <ol class="list-decimal list-inside ml-4 mb-4 space-y-2">
+                <li><strong>Human Interface (I/O):</strong> The need to convert data to and from the decimal (base 10) system, which dominates human interaction.</li>
+                <li><strong>Machine Interoperability:</strong> The need to exchange data with the ubiquitous binary (base 2) architecture.</li>
+            </ol>
+            <p>
+                Direct conversions (e.g., $10 \leftrightarrow 3$ or $3 \leftrightarrow 2$) are complex and slow arithmetic operations. This paper demonstrates how an algorithm for conversion between adjacent bases ($p$ and $p \pm 1$) [1] provides an elegant solution to both bottlenecks.
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">2. The $p \to p \pm 1$ Translation Algorithm</h2>
+            <p class="mb-4">
+                The core algorithm [1] allows the conversion of a number in base $p$ to base $p-1$ or $p+1$ through an iterative process similar to synthetic division. Given a number $(a_n \dots a_0)_p$, the algorithm computes a quotient $(b_n \dots b_0)_p$ and a remainder $c_0$ from the division by $(p \pm 1)$, processing digit by digit.
+            </p>
+            <p class="mb-4">
+                The recurrence formulas (with sign adjustments based on standard implementations) are:
+            </p>
+            <div class="my-6 p-4 bg-gray-50 rounded border border-gray-100 overflow-x-auto text-center">
+                $$c_i = \{a_i \mp c_{i+1}\}_{p \pm 1}$$
+                $$b_i = c_{i+1} + [a_i \mp c_{i+1}]_{p \pm 1}$$
+            </div>
+            <p class="mb-4 text-sm text-gray-600 text-center">
+                <em>Where $c_{n+1}=0$, $\{x\}_y$ denotes the remainder, and $[x]_y$ the integer quotient.</em>
+            </p>
+
+            <h3 class="text-xl font-semibold mb-3 mt-6 text-gray-800">2.1. Mathematical Derivation</h3>
+            <p class="mb-4">
+                The correctness of these formulas derives from the substitution $p = (p \pm 1) \mp 1$ into the standard polynomial representation of the number. In any step $i$ of the division, the current partial value is $c_{i+1} \cdot p + a_i$.
+            </p>
+            <p class="mb-4">
+                By substituting $p$:
+                $$ c_{i+1} \cdot ((p \pm 1) \mp 1) + a_i $$
+                $$ = c_{i+1} \cdot (p \pm 1) \mp c_{i+1} + a_i $$
+            </p>
+            <p>
+                Taking this value modulo $(p \pm 1)$, the first term vanishes, leaving the remainder $c_i = \{a_i \mp c_{i+1}\}_{p \pm 1}$. This simple linear recurrence avoids full multi-digit multiplication, explaining the algorithm's efficiency.
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">3. Methodology: The Nonary (Base 9) Bridge for Decimal I/O</h2>
+            <p class="mb-4">
+                The solution for the $10 \leftrightarrow 3$ conversion bottleneck lies in the observation that $9 = 3^2$. This power relationship allows for a trivial (mapping-based) conversion between bases 9 and 3, analogous to the established relationship between hexadecimal (base 16) and binary (base 2) systems.
+            </p>
+            <p class="mb-4">
+                The $p \to p \pm 1$ algorithm is therefore best applied to translate between bases 10 and 9, rather than directly to base 3.
+            </p>
+
+            <h3 class="text-xl font-semibold mb-3 mt-6 text-gray-800">3.1. Input Process: Decimal (10) $\to$ Ternary (3)</h3>
+            <ol class="list-decimal list-outside ml-6 space-y-3 mb-6">
+                <li>
+                    <strong>Decimal $\to$ Nonary Conversion ($p \to p-1$):</strong> The input number (base $p=10$) is converted to base 9 (base $p-1$) using the successive division algorithm by 9.
+                    <br><span class="text-gray-600 italic ml-4">Example [1]: $1234_{10} \to 1621_9$</span>
+                </li>
+                <li>
+                    <strong>Nonary $\to$ Standard Ternary Conversion ($9 \to 3$):</strong> Each nonary digit is mapped directly to a pair of ternary digits (trits) $\{0, 1, 2\}$, since $9=3^2$.
+                    <br><span class="text-gray-600 italic ml-4">Result: $1621_9 \to (01)(20)(02)(01)_3 = 1200201_3$ (standard representation)</span>
+                </li>
+                <li>
+                    <strong>Conversion to Balanced Ternary (Setun):</strong> The standard ternary number $\{0, 1, 2\}$ is finally converted to the balanced system $\{-1, 0, 1\}$ via a fast internal CPU algorithm.
+                </li>
+            </ol>
+
+            <h3 class="text-xl font-semibold mb-3 mt-6 text-gray-800">3.2. Output Process: Ternary (3) $\to$ Decimal (10)</h3>
+            <ol class="list-decimal list-outside ml-6 space-y-3">
+                <li>
+                    <strong>Balanced $\to$ Standard Ternary Conversion:</strong> The Setun's internal balanced number is converted to its standard ternary representation $\{0, 1, 2\}$.
+                </li>
+                <li>
+                    <strong>Standard Ternary $\to$ Nonary Conversion ($3 \to 9$):</strong> The trits are grouped in pairs (from right to left) and mapped directly to nonary digits.
+                    <br><span class="text-gray-600 italic ml-4">Example: $1200201_3 \to (01)(20)(02)(01)_3 \to 1621_9$</span>
+                </li>
+                <li>
+                    <strong>Nonary $\to$ Decimal Conversion ($p \to p+1$):</strong> The base 9 number (base $p=9$) is converted to base 10 (base $p+1$) using the successive division algorithm by 10.
+                    <br><span class="text-gray-600 italic ml-4">Example [1]: $1621_9 \to 1234_{10}$</span>
+                </li>
+            </ol>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">4. Discussion and Application to Binary Interoperability</h2>
+            <p class="mb-4">
+                The "nonary bridge" methodology (Section 3) efficiently solves the decimal I/O problem. However, the $p \to p \pm 1$ algorithm has a second, equally crucial application: interoperability with standard binary systems.
+            </p>
+            <p>
+                For a ternary computer (base $p=3$) to communicate with a binary computer (base $p-1=2$), a $3 \to 2$ conversion is required. The <strong>$p \to p-1$ algorithm</strong>, with $p=3$, provides the most direct and computationally efficient method for performing this <strong>Ternary $\to$ Binary</strong> translation. A number in base 3 can be repeatedly divided by base 2 (represented in ternary arithmetic as standard digits) using the same linear, digit-by-digit method described in Section 2.
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">5. Conclusion</h2>
+            <p class="mb-4">
+                The $p \to p \pm 1$ translation algorithm is not merely a mathematical curiosity but a historically significant software and hardware engineering tool with a dual application for ternary systems:
+            </p>
+            <ul class="list-disc list-inside ml-4 space-y-2">
+                <li><strong>I/O Efficiency:</strong> It elegantly solves the decimal conversion bottleneck ($10 \leftrightarrow 3$) by strategically using base 9 as an intermediary.</li>
+                <li><strong>Interoperability:</strong> It provides a native, direct method for ternary-to-binary conversion ($3 \to 2$), essential for communication with standard architectures.</li>
+            </ul>
+            <p class="mt-4">
+                This approach demonstrates how the selection of adjacent base conversion algorithms is fundamental to the practical viability of non-binary computing architectures.
+            </p>
+        </section>
+
+        <section class="mt-12 pt-8 border-t-2 border-gray-200">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">6. References</h2>
+            <ol class="list-decimal list-outside ml-6 text-sm text-gray-700">
+                <li>
+                    Alvarez H., R. (1970). <em>Simple algorithms for p→p-1 and p→p+1 translations</em>. In: Computer Science and Cybernetics, issue 7. Moscow State University Press.
+                </li>
+            </ol>
+        </section>
+    </article>
+</main>
 </body>
 </html>
